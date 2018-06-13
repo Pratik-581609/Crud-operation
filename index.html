@@ -1,0 +1,135 @@
+<HTML ng-app = "evolentApp">
+     
+ <TITLE>AngularJS: CRUD Operation</TITLE>
+   <style>
+	input[type=number]::-webkit-inner-spin-button, 
+	input[type=number]::-webkit-outer-spin-button { 
+    		-webkit-appearance: none;
+    		-moz-appearance: none;
+    		appearance: none;
+    		margin: 0; 
+	}
+   </style>
+    
+    <script src="angular.min.js"></script>
+     
+    <script>     
+       var evolentApp = angular.module("evolentApp",[]); 
+                
+       evolentApp.controller("evolentAppCtrl",function($scope){   
+ 
+             $scope.contactindex = 0;  
+  
+             $scope.status = [{Text:"active",Value:"Active"},    
+                                    {Text:"inactive",Value:"Inactive"}    
+                                ];    
+           
+ 
+       	     $scope.contacts=[]; 
+    
+             $scope.edit = function(ct){   
+                          $scope.contactindex = $scope.contacts.indexOf(ct);    
+                          $scope.contact.ID = $scope.contactindex;    
+                          $scope.contact.firstName = ct.firstName;    
+                          $scope.contact.lastName = ct.lastName;    
+                          $scope.contact.email = ct.email;    
+                          $scope.contact.phone = ct.phone; 
+			  $scope.contact.status = ct.status;
+			  $scope.contact.operation = 'edit';
+             };
+    
+             $scope.updatecontact = function(){
+		if (Object.keys($scope.contact).length > 0) {
+		   var ct = {    
+                          	ID: $scope.contact.ID,    
+                          	firstName: $scope.contact.firstName,    
+                          	lastName: $scope.contact.lastName,    
+                          	email: $scope.contact.email,    
+                          	phone: $scope.contact.phone,
+			  	status: $scope.contact.status   
+                          };  
+  
+                    if($scope.contact.operation == 'edit'){    
+                          $scope.contacts[$scope.contactindex] = ct;                        
+                     } else {    
+                     	  ct.ID = $scope.contacts.length+1;    
+                          $scope.contacts.push(ct);
+		     }   
+ 
+                     $scope.clear();
+		}   
+             };
+    
+             $scope.delete = function(ct){    
+                 var _index = $scope.contacts.indexOf(ct);     
+         	 $scope.contacts.splice(_index, 1);
+		 $scope.clear();     
+             };  
+  
+             $scope.clear = function(){    
+                $scope.contact = {};   
+             };    
+       });          
+    </script>  
+   
+    <BODY ng-controller="evolentAppCtrl">     
+       <P>    
+       <TABLE>    
+       <TR>    
+       <TD>First Name:</TD>    
+       <TD><INPUT TYPE="txt" ng-model="contact.firstName"/></TD>    
+       </TR>
+	<TR>    
+        <TD>Last Name:</TD>    
+        <TD><INPUT TYPE="txt" ng-model="contact.lastName"/></TD>    
+       </TR>
+	<TR>    
+        <TD>Email:</TD>    
+        <TD><INPUT TYPE="text" ng-model="contact.email"/></TD>    
+       </TR>
+	<TR>    
+        <TD>Phone Number:</TD>    
+        <TD><INPUT TYPE="number" ng-model="contact.phone"/></TD>    
+       </TR>    
+       <TR>    
+       <TD>Status:</TD>    
+       <TD>    
+       <SELECT ng-model="contact.status">    
+       <OPTION ng-repeat="c in status" value="{{c.Value}}"/>{{c.Text}}</OPTION>    
+       </SELECT>    
+       </TD>    
+       </TR>    
+       <TR>    
+       <TD>    
+       </TD>    
+       <TD>    
+         <button ng-click="updatecontact()">Save</button>     
+        <button ng-click="clear()">Clear</button>    
+       </TD>    
+       </TR>    
+       </TABLE>    
+       </P>    
+       <HR/>    
+       <table border="1" ng-if="contacts.length > 0">     
+         <tr>     
+            <th>First Name</th>     
+            <th>Last Name</th>     
+            <th>Email</th>     
+            <th>Phone Number</th>     
+            <th>Status</th>
+	    <th>Action</th>    
+         </tr>
+         <tr ng-repeat="contact in contacts">     
+            <td>{{contact.firstName}}</td>     
+            <td>{{contact.lastName}}</td>     
+            <td>{{contact.email}}</td>     
+            <td>{{contact.phone}}</td>     
+	    <td>{{contact.status}}</td>
+            <TD>    
+         	<button ng-click="edit(contact)">Edit</button>     
+        	<button ng-click="delete(contact)">Delete</button>     
+       	    </TD>    
+         </tr>     
+       </table>     
+    </BODY>     
+  </HTML>  
